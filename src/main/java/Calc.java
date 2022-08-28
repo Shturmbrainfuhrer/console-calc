@@ -1,37 +1,6 @@
-package com.company;
-
 import java.util.Stack;
-import java.util.Scanner;
 
-public class Main {
-
-    private static Scanner in = new Scanner(System.in);
-
-    public static void main(String[] args) {
-        // String str = in.nextLine();
-        // System.out.print(makePostfix(str));
-        System.out.println(makePostfix("(2+9)*7-8"));
-        System.out.println(calc("(2+9)*7-8"));
-        Stack<Character> stack = new Stack<>();
-
-
-
-        stack.push('(');
-        stack.push('2');
-        stack.push('+');
-        stack.push('9');
-        stack.push(')');
-        stack.push('*');
-        stack.push('7');
-        stack.push('-');
-        stack.push('8');
-
-//             while (!stack.isEmpty()) {
-//              System.out.println(stack.pop());
-//            }
-    }
-
-
+public class Calc {
     static String makePostfix(String expression) {
         StringBuffer result = new StringBuffer();
         Stack<Character> stack = new Stack<>();
@@ -54,7 +23,6 @@ public class Main {
                     result.append(stack.pop());
                 }
                 stack.pop();
-
             }
             else {
                 result.append(current);
@@ -65,27 +33,24 @@ public class Main {
             result.append(stack.pop());
         }
 
-
         return result.toString();
     }
 
-    static Double calc (String expression){
+    static Double calcPostfix(String postfixExpression) {
         Double result = 1.0;
-        String[] str = makePostfix(expression).split(" ");
-        Stack<Double> stack = new Stack<Double>();
+        String[] str = postfixExpression.split(" ");
+        Stack<Double> stack = new Stack();
 
-        for (int i = 0; i < str.length; i++){
-            for (int j = 0; j < str[i].length(); j++){
-                char current = str[i].charAt(j);
-                if (!isOperator(current)){
-                    stack.push(Double.parseDouble(str[i]));
-                }
-                else {
+        for (String s : str) {
+            for (int j = 0; j < s.length(); j++) {
+                char current = s.charAt(j);
+                if (!isOperator(current)) {
+                    stack.push(Double.parseDouble(s));
+                } else {
                     double t1 = stack.pop();
                     double t2 = stack.pop();
 
-                    switch (current)
-                    {
+                    switch (current) {
                         case '+':
                             stack.push(t1 + t2);
                             break;
@@ -108,8 +73,10 @@ public class Main {
         return result;
     }
 
-
-
+    static Double calc(String expression) {
+        String postfix = Calc.makePostfix("(21+9)*7-8");
+        return Calc.calcPostfix(postfix);
+    }
 
     static int priority(char ch){
         switch (ch) {
@@ -132,6 +99,3 @@ public class Main {
         return false;
     }
 }
-
-
-
